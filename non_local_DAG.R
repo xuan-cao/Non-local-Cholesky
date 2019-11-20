@@ -180,7 +180,7 @@ evaluation.dag(true.adj, dag.nonlocal)
 
 ##############FBF search
 time = Sys.time()
-M_q=FBF_LS(cor(X), n, matrix(0,p,p), 0, 0.01, 1000)
+M_q=FBF_LS(cor(X), n, matrix(0,p,p), 0, 0.01, 5000)
 elapsed.FBF = Sys.time() - time
 print(elapsed.FBF)
 G_med=M_q
@@ -220,7 +220,7 @@ gamma = 1
 nu0 = 0.1
 c1 = 0.0001
 c2 = 2
-niter = 2000
+niter = 5000
 nburn = 0.2*niter
 nadap = 0
 
