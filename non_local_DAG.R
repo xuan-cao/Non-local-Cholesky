@@ -17,7 +17,7 @@ true.L <- matrix(1,p,p)
 true.L[upper.tri(true.L)] <- 0
 for(i in 1:(p-1))
 {
-  true.L[(i+1):p,i] <- true.L[(i+1):p,i]*rbinom(p-i,1,min(spars/(p-i),1))
+  true.L[(i+1):p,i] <- true.L[(i+1):p,i]*rbinom(p-i,1,min(spars/100,1))
 }
 nonzero <- as.vector(1*colSums(true.L))
 for(j in 1:(p-1)) {
