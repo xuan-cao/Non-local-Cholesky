@@ -88,7 +88,7 @@ xuan = function(S, n, r, alpha1, alpha2, tau) {
       }
       if(sum(cand_Zj) == 0) cand_Zj[sample(1:length(cand_Zj),1)] = 1
       cand_post = logposterior(cand_Zj,j)
-      if (log(runif(1)) < - log(1 + exp(curr_post-cand_post))) {
+      if (log(runif(1)) < min(cand_post-curr_post, 0)) {
         curr_Zj = cand_Zj
         curr_post = cand_post
       }
