@@ -11,10 +11,17 @@ n <- 100
 p <- 200
 cat("n",n,"p",p,"\n")
 
+# set sparsity level 4% or 8% (percentage of nonzero entries in true L)
 spars <- 4
 cat("spars",spars,"\n")
+
+# first create a matrix with all entries being 1
 true.L <- matrix(1,p,p)
+
+# set the upper triangular to be 0
 true.L[upper.tri(true.L)] <- 0
+
+# generate and select nonzero entries in each column of L such that the expected pertenage of nonzero etries in each column of L is the pre-determined sparsity value
 for(i in 1:(p-1))
 {
   true.L[(i+1):p,i] <- true.L[(i+1):p,i]*rbinom(p-i,1,min(spars/100,1))
@@ -25,11 +32,12 @@ for(j in 1:(p-1)) {
 }
 
 
-
+# create the adjacency matrix according to the true L
 true.adj <- true.L
 diag(true.L) <- 1
 diag(true.adj) <- 0
 
+# generate the true covariance matrix and data based on the true covariance matrix
 true.Sigma <- solve(true.L%*%t(true.L))
 X <- mvrnorm(n,rep(0, p),Sigma=true.Sigma)
 S <- 1/n*t(X)%*%X
@@ -37,7 +45,7 @@ tau <- 1
 print(tau)
 
 
-
+# set the initial value for the MCMC algorithm
 tildeS <- S + diag(p)/(n*tau)
 epsilon <- 0.3
 ch <- chol(solve(S+epsilon*diag(p))) 
@@ -54,7 +62,7 @@ for(m in 1:(p-1)) {
 }
 diag(L.epsilon1) <- 0
 
-
+# set hyperparameters
 r <- 2
 alpha1 <- 0.01
 alpha2 <- 0.01
@@ -111,6 +119,7 @@ haha <- xuan(S, n, r, alpha1, alpha2, tau)
 elapsed.nonlocal = Sys.time() - time
 print(elapsed.nonlocal)
 
+# evaluate the method performance
 dag.nonlocal <- cbind(1*(matrix(unlist(haha), nrow = p)/(niter-nburn)>0.5),L.epsilon1[,((p-9):p)])
 evaluation.dag(true.adj, dag.nonlocal)
 
